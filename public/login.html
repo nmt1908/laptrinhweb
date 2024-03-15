@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng nhập</title>
+    <link rel="stylesheet" href="./css/login.css">
+</head>
+<body>
+
+<div class="container">
+    <h2>Đăng nhập</h2>
+    <form id="loginForm" action="/process_login" method="post">
+        <label for="username">Tên người dùng:</label>
+        <input type="text" id="username" name="username" required>
+
+        <label for="password">Mật khẩu:</label>
+        <input type="password" id="password" name="password" required>
+
+        <input type="checkbox" id="rememberMe" name="rememberMe">
+        <label for="rememberMe">Ghi nhớ đăng nhập</label><br>
+
+        <input type="submit" value="Đăng nhập">
+    </form>
+    <a href="#" id="forgotPassword">Quên mật khẩu?</a>
+</div>
+
+<script>
+    // Xử lý quên mật khẩu
+    document.getElementById("forgotPassword").addEventListener("click", function(event) {
+        event.preventDefault();
+        // Thực hiện xử lý khi người dùng nhấn vào liên kết quên mật khẩu
+        // Ví dụ: Hiển thị một hộp thoại yêu cầu nhập địa chỉ email để đặt lại mật khẩu
+        alert("Vui lòng nhập địa chỉ email của bạn để đặt lại mật khẩu.");
+    });
+</script>
+
+</body>
+</html>
