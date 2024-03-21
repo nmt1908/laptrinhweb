@@ -30,6 +30,13 @@ JOIN orders ON users.id = orders.user_id
 GROUP BY users.id, users.name
 ORDER BY order_count DESC
 LIMIT 7;
+6. SELECT DISTINCT u.user_id, u.user_name, od.order_id, p.product_name
+FROM users u
+INNER JOIN orders o ON u.user_id = o.user_id
+INNER JOIN order_details od ON o.order_id = od.order_id
+INNER JOIN products p ON od.product_id = p.product_id
+WHERE p.product_name LIKE '%Samsung%' OR p.product_name LIKE '%Apple%'
+LIMIT 7;
 Câu 7: SELECT users.user_id, users.user_name, orders.order_id, SUM(products.product_price) AS total_price
 FROM users
 JOIN orders ON users.user_id = orders.user_id
@@ -40,7 +47,49 @@ Liệt kê danh sách mua hàng của user bao gồm giá tiền của mỗi đ�
 hiển thị gồm: mã user, tên user, mã đơn hàng, tổng tiền, số sản phẩm. Mỗi user chỉ
 chọn ra 1 đơn hàng có giá tiền nhỏ nhất.
 
-
+8. SELECT 
+    u.user_id,
+    u.user_name,
+    MAX(od.order_detail_id) AS order_detail_id,
+    SUM(total_price_per_order) AS total_price
+FROM
+    users u
+JOIN 
+    orders o ON u.user_id = o.user_id
+JOIN 
+    order_details od ON o.order_id = od.order_id
+JOIN 
+    (
+        SELECT 
+            o2.order_id,
+            SUM(p2.product_price) AS total_price_per_order
+        FROM
+            orders o2
+        JOIN 
+            order_details od2 ON o2.order_id = od2.order_id
+        JOIN 
+            products p2 ON od2.product_id = p2.product_id
+        GROUP BY 
+            o2.order_id
+    ) AS order_total_price ON o.order_id = order_total_price.order_id
+JOIN 
+    products p ON od.product_id = p.product_id
+WHERE
+    (o.order_id, p.product_price) IN (
+        SELECT 
+            o2.order_id,
+            MAX(p2.product_price)
+        FROM
+            orders o2
+        JOIN 
+            order_details od2 ON o2.order_id = od2.order_id
+        JOIN 
+            products p2 ON od2.product_id = p2.product_id
+        GROUP BY 
+            o2.order_id
+    )
+GROUP BY 
+    u.user_id, u.user_name;
 9--SELECT u.user_id, u.user_name, o.order_id, SUM(p.product_price) AS total_price, COUNT(od.order_detail_id) AS total_items
 FROM users u
 JOIN orders o ON u.user_id = o.user_id
